@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070718">
+  <title>infiniti Mail</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body class="locked">
+  <div class="login-screen hidden" id="loginScreen">
+    <form class="login-card" id="loginForm" autocomplete="on">
+      <img src="assets/infiniti-logo.jpeg" alt="infiniti Code logo" class="login-logo">
+      <h1>Sign in to infiniti Mail</h1>
+      <p>Use your company mailbox address and password.</p>
+      <label>Email<input id="loginEmail" type="email" name="username" autocomplete="username" placeholder="you@infiniticodetech.com" required></label>
+      <label>Password<input id="loginPassword" type="password" name="password" autocomplete="current-password" required></label>
+      <div class="login-error" id="loginError" role="alert"></div>
+      <button class="primary-btn" id="loginBtn" type="submit">Sign in</button>
+    </form>
+  </div>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="infiniti Code home">
+        <img src="assets/infiniti-logo.jpeg" alt="infiniti Code logo" class="brand-logo">
+        <span class="brand-copy"><strong>INFINITI CODE</strong><small>TECHNOLOGIES PVT LTD.</small></span>
+      </a>
+      <label class="search-box" aria-label="Search mail">
+        <span class="search-icon">⌕</span>
+        <input id="searchInput" type="search" placeholder="Search mail..." autocomplete="off">
+        <kbd>Enter</kbd>
+      </label>
+      <div class="top-actions">
+        <button class="icon-button" id="settingsBtn" title="Settings" aria-label="Settings">⚙</button>
+        <button class="icon-button notification-button" id="notificationsBtn" title="Notifications" aria-label="Notifications">♧<i></i></button>
+        <div class="profile-wrap">
+          <button class="profile" id="profileBtn" aria-label="Account menu" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu"><span>…</span></button>
+          <div class="profile-menu hidden" id="profileMenu" role="dialog" aria-label="Account details">
+            <div class="pm-head"><div class="pm-avatar">…</div><div class="pm-id"><strong></strong><span></span></div></div>
+            <dl class="pm-details">
+              <div><dt>Username</dt><dd></dd></div>
+              <div><dt>Password</dt><dd>••••••••••</dd></div>
+              <div><dt>Organization</dt><dd>Infiniti Code Technologies Pvt Ltd.</dd></div>
+              <div><dt>Role</dt><dd>Member</dd></div>
+              <div><dt>Last sign-in</dt><dd id="pmLastLogin">Today</dd></div>
+              <div><dt>Status</dt><dd><i class="pm-online"></i>Signed in</dd></div>
+            </dl>
+            <div class="pm-actions"><button class="outline-btn" id="pmCopy">Copy email</button><button class="outline-btn" id="pmManage">Manage account</button><button class="outline-btn pm-signout" id="pmSignOut">Sign out</button></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="workspace reading-closed" id="workspace">
+      <aside class="sidebar">
+        <button class="compose-btn" id="composeBtn"><span>＋</span> Compose</button>
+        <nav class="mail-nav" aria-label="Mail folders">
+          <button class="nav-item active" data-folder="Inbox"><span class="nav-icon">✉</span><span>Inbox</span></button>
+          <button class="nav-item" data-folder="Starred"><span class="nav-icon">☆</span><span>Starred</span></button>
+          <button class="nav-item" data-folder="Snoozed"><span class="nav-icon">◷</span><span>Snoozed</span></button>
+          <button class="nav-item" data-folder="Sent"><span class="nav-icon">➤</span><span>Sent</span></button>
+          <button class="nav-item" data-folder="Drafts"><span class="nav-icon">▱</span><span>Drafts</span></button>
+          <button class="nav-item" id="moreBtn"><span class="nav-icon" aria-hidden="true"></span><span>More</span><span class="nav-chevron">›</span></button>
+          <div class="more-folders hidden" id="moreFolders">
+            <button class="nav-item" data-folder="Important"><span class="nav-icon">❖</span><span>Important</span></button>
+            <button class="nav-item" data-folder="Spam"><span class="nav-icon">⊘</span><span>Spam</span></button>
+            <button class="nav-item" data-folder="Trash"><span class="nav-icon">▤</span><span>Trash</span></button>
+          </div>
+        </nav>
+        <div class="sidebar-divider"></div>
+        <div class="labels-heading"><span>Labels</span><button id="addLabelBtn" title="Add label">＋</button></div>
+        <div class="labels-list">
+          <button class="label-item" data-label="Work"><i class="label-dot work"></i>Work</button>
+          <button class="label-item" data-label="Personal"><i class="label-dot personal"></i>Personal</button>
+          <button class="label-item" data-label="Important"><i class="label-dot important"></i>Important</button>
+          <button class="label-item" data-label="Updates"><i class="label-dot updates"></i>Updates</button>
+        </div>
+        <div class="storage" hidden><div><span>Storage</span><span>18%</span></div><div class="storage-track"><i></i></div><small>1.8 GB of 10 GB used</small></div>
+      </aside>
+
+      <section class="mail-panel">
+        <div class="list-toolbar">
+          <h1 id="folderTitle" class="sr-only">Inbox</h1>
+          <div class="toolbar-left">
+            <div class="tb-wrap">
+              <div class="select-split">
+                <label class="select-check" title="Select all"><input type="checkbox" id="selectAllBox" aria-label="Select all messages"></label>
+                <button class="tb-btn select-caret" id="selectMenuBtn" type="button" title="Select options" aria-label="Select options" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><path d="M6 9l6 6 6-6"/></svg></button>
+              </div>
+              <div class="tb-menu hidden" id="selectMenu" role="menu">
+                <button type="button" role="menuitem" data-select="all">All</button>
+                <button type="button" role="menuitem" data-select="none">None</button>
+                <button type="button" role="menuitem" data-select="read">Read</button>
+                <button type="button" role="menuitem" data-select="unread">Unread</button>
+                <button type="button" role="menuitem" data-select="starred">Starred</button>
+                <button type="button" role="menuitem" data-select="unstarred">Unstarred</button>
+              </div>
+            </div>
+            <button class="tb-btn" id="refreshBtn" type="button" title="Refresh" aria-label="Refresh"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
+            <button class="tb-btn tb-danger" id="deleteSelBtn" type="button" title="Delete" aria-label="Delete selected messages"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
+            <div class="tb-wrap">
+              <button class="tb-btn" id="moreActionsBtn" type="button" title="More" aria-label="More actions" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" fill="currentColor" stroke="none"><circle cx="12" cy="5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="19" r="1.9"/></svg></button>
+              <div class="tb-menu hidden" id="moreMenu" role="menu">
+                <button type="button" role="menuitem" id="markAllReadBtn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M8.5 13.5l2.5 2.5 4.5-4.5"/></svg>Mark all as read</button>
+              </div>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <span class="admin-badge" role="img" title="Admin" aria-label="Admin">A</span>
+            <div class="tb-wrap">
+              <button class="tb-btn" id="filterBtn" type="button" title="Filter" aria-label="Filter" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.5V20l-4-2v-4.5z"/></svg></button>
+              <div class="tb-menu tb-menu-right hidden" id="filterMenu" role="menu">
+                <p class="tb-menu-label">Date</p>
+                <button type="button" role="menuitem" data-datefilter="all">Any time</button>
+                <button type="button" role="menuitem" data-datefilter="30">Last 30 days</button>
+                <button type="button" role="menuitem" data-datefilter="60">Last 60 days</button>
+                <button type="button" role="menuitem" data-datefilter="custom" id="customRangeBtn">Custom</button>
+                <div class="tb-range hidden" id="customRange">
+                  <label>From<input type="date" id="dateFrom"></label>
+                  <label>To<input type="date" id="dateTo"></label>
+                  <button type="button" id="rangeClear">Clear dates</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bulk-toolbar hidden" id="bulkToolbar"><span id="selectedCount">0 selected</span><button id="archiveBtn">Archive</button><button id="deleteBtn">Delete</button><button id="markReadBtn">Mark read</button></div>
+        <div class="message-list" id="messageList" aria-live="polite"></div>
+        <div class="empty-state hidden" id="emptyState"><span>✉</span><strong>No messages found</strong><p>Try another folder or search term.</p></div>
+        <div class="list-footer" id="listFooter"><span id="pageRange" aria-live="polite">0–0 of 0</span><button class="tb-btn page-btn" id="prevPage" type="button" title="Newer" aria-label="Previous page"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="tb-btn page-btn" id="nextPage" type="button" title="Older" aria-label="Next page"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
+      </section>
+
+      <section class="reading-panel" id="readingPanel">
+        <div class="reading-empty" id="readingEmpty"><div class="empty-mail-icon">✉</div><h2>Your inbox, in focus</h2><p>Select a message to read it here.</p></div>
+        <article class="email-view hidden" id="emailView">
+          <div class="email-subject-row"><h2 id="emailSubject"></h2><span class="pill" id="emailLabel">Inbox</span><button class="icon-button maximize-reading" id="maximizeReading" title="Maximize message" aria-label="Maximize message" aria-pressed="false"><svg class="ico-max" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg><svg class="ico-restore" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5V6H2.5M13.5 6H10V2.5M10 13.5V10h3.5M2.5 10H6v3.5"/></svg></button><button class="icon-button close-reading" id="closeReading" title="Close message">×</button></div>
+          <div class="sender-row"><div class="avatar" id="emailAvatar">IS</div><div class="sender-details"><strong id="emailSender"></strong><span id="emailAddress"></span><small>to me <span>⌄</span></small></div><time id="emailTime"></time><button class="icon-button" id="replyArrow" title="Reply">↶</button><button class="icon-button" id="emailMenu" title="More options">⋮</button></div>
+          <div class="email-body" id="emailBody"></div>
+          <div class="email-footer"><button class="outline-btn" id="replyBtn">↶ &nbsp; Reply</button><button class="outline-btn" id="forwardBtn">➦ &nbsp; Forward</button><button class="round-btn" id="reactBtn" title="React">☺</button></div>
+        </article>
+      </section>
+    </main>
+
+    <nav class="app-dock" id="appDock" aria-label="Workspace apps">
+      <button class="apps-trigger" id="appsBtn" aria-expanded="true" aria-controls="appDock" title="Minimize apps"><span class="apps-grid">▦</span><strong>Apps</strong><span class="dock-chevron" aria-hidden="true">›</span></button>
+      <button class="dock-item" data-app="Events"><span class="dock-icon">▦</span><small>Events</small></button>
+      <button class="dock-item" data-app="Contacts"><span class="dock-icon">♟</span><small>Contacts</small></button>
+      <button class="dock-item" data-app="Meetings"><span class="dock-icon">▣</span><small>Meetings</small></button>
+      <button class="dock-item" data-app="Calendar"><span class="dock-icon">▦</span><small>Calendar</small></button>
+      <button class="dock-item" data-app="Tasks"><span class="dock-icon">☷</span><small>Tasks</small></button>
+    </nav>
+  </div>
+
+  <dialog id="composeDialog" class="compose-dialog">
+    <form method="dialog" id="composeForm">
+      <div class="dialog-title"><strong>New message</strong><button class="icon-button" value="cancel" aria-label="Close">×</button></div>
+      <label>To<input id="composeTo" type="email" placeholder="recipient@example.com" required></label>
+      <label>Subject<input id="composeSubject" placeholder="Subject"></label>
+      <label class="body-label">Message<textarea id="composeBody" rows="7" placeholder="Write your message..."></textarea></label>
+      <div class="dialog-actions"><span id="composeStatus"></span><button class="primary-btn" id="sendBtn" type="submit">Send ➤</button></div>
+    </form>
+  </dialog>
+  <dialog id="appDialog" class="app-dialog" aria-labelledby="appDialogTitle">
+    <div class="app-dialog-head"><div class="app-dialog-title"><span class="dock-icon" id="appDialogIcon"></span><strong id="appDialogTitle"></strong></div><button class="icon-button" id="appDialogClose" aria-label="Close">×</button></div>
+    <div class="app-dialog-body" id="appDialogBody"></div>
+  </dialog>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>
